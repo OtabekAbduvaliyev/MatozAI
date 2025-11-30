@@ -37,7 +37,9 @@ export class StorageService {
         id: s.id,
         text: s.text,
         audioBlob: null, // Blobni darhol yuklamaymiz, URL ishlatamiz
-        audioUrl: s.audioUrl ? `${api.defaults.baseURL}${s.audioUrl}` : null,
+        audioUrl: s.audioUrl
+          ? `${api.defaults.baseURL}/sessions/${s.id}/audio`
+          : null,
         timestamp: new Date(s.createdAt).getTime(),
         duration: s.duration,
       }));

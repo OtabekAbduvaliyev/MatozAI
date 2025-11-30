@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Play, Pause, Share2, Download, RotateCcw } from "lucide-react";
 import { shareAudio, downloadAudio, formatDuration } from "../utils/audioUtils";
+import api from "../services/api";
 
 interface AudioPlayerProps {
   audioBlob: Blob | null;
@@ -19,48 +20,63 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
   const [duration, setDuration] = useState(0);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [message, setMessage] = useState<string | null>(null); // Local toast
+  const [fetchedBlob, setFetchedBlob] = useState<Blob | null>(null);
 
   // Initialize Audio
   useEffect(() => {
-    let url = "";
+    let active = true;
+    let objectUrl = "";
 
-    if (audioBlob) {
-      url = URL.createObjectURL(audioBlob);
-    } else if (audioUrl) {
-      url = audioUrl;
-    } else {
-      return;
-    }
+    const loadAudio = async () => {
+      try {
+        let blob = audioBlob;
 
-    const audio = new Audio(url);
-    audioRef.current = audio;
+        if (!blob && audioUrl) {
+          // Fetch secure audio
+          const response = await api.get(audioUrl, { responseType: "blob" });
+          blob = response.data;
+          if (active) setFetchedBlob(blob);
+        }
 
-    // Enable cross-origin for backend audio
-    if (audioUrl && !audioBlob) {
-      audio.crossOrigin = "anonymous";
-    }
+        if (!blob || !active) return;
 
-    audio.addEventListener("loadedmetadata", () => {
-      if (isFinite(audio.duration)) {
-        setDuration(audio.duration);
+        objectUrl = URL.createObjectURL(blob);
+        const audio = new Audio(objectUrl);
+        audioRef.current = audio;
+
+        audio.addEventListener("loadedmetadata", () => {
+          if (active && isFinite(audio.duration)) {
+            setDuration(audio.duration);
+          }
+        });
+
+        audio.addEventListener("timeupdate", () => {
+          if (active) setCurrentTime(audio.currentTime);
+        });
+
+        audio.addEventListener("ended", () => {
+          if (active) {
+            setIsPlaying(false);
+            setCurrentTime(0);
+          }
+        });
+      } catch (err) {
+        console.error("Failed to load audio", err);
+        if (active) setMessage("Audio yuklashda xatolik");
       }
-    });
+    };
 
-    audio.addEventListener("timeupdate", () => {
-      setCurrentTime(audio.currentTime);
-    });
-
-    audio.addEventListener("ended", () => {
-      setIsPlaying(false);
-      setCurrentTime(0);
-    });
+    loadAudio();
 
     return () => {
-      audio.pause();
-      if (audioBlob) {
-        URL.revokeObjectURL(url);
+      active = false;
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
       }
-      audioRef.current = null;
+      if (objectUrl) {
+        URL.revokeObjectURL(objectUrl);
+      }
     };
   }, [audioBlob, audioUrl]);
 
@@ -90,32 +106,21 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
   };
 
   const handleShare = async () => {
-    if (audioBlob) {
-      const success = await shareAudio(audioBlob);
+    const blobToShare = audioBlob || fetchedBlob;
+    if (blobToShare) {
+      const success = await shareAudio(blobToShare);
       setShowShareMenu(false);
       if (!success) {
         setMessage("Ulashish imkonsiz. Fayl yuklanmoqda...");
-        downloadAudio(audioBlob);
+        downloadAudio(blobToShare);
       }
-    } else if (audioUrl) {
-      // For URL, we can just copy to clipboard or open in new tab
-      navigator.clipboard.writeText(audioUrl);
-      setMessage("Audio havolasi nusxalandi");
-      setShowShareMenu(false);
     }
   };
 
   const handleDownload = () => {
-    if (audioBlob) {
-      downloadAudio(audioBlob);
-    } else if (audioUrl) {
-      // Create a temporary link to download
-      const link = document.createElement("a");
-      link.href = audioUrl;
-      link.download = `recording-${Date.now()}.webm`; // Backend extension might vary
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+    const blobToDownload = audioBlob || fetchedBlob;
+    if (blobToDownload) {
+      downloadAudio(blobToDownload);
     }
     setShowShareMenu(false);
     setMessage("Fayl yuklanmoqda...");
