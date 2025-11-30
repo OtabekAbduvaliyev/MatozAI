@@ -1,5 +1,9 @@
-
-import { GoogleGenAI, LiveServerMessage, Modality, Blob as GenAIBlob } from '@google/genai';
+import {
+  GoogleGenAI,
+  LiveServerMessage,
+  Modality,
+  Blob as GenAIBlob,
+} from "@google/genai";
 
 interface GeminiServiceCallbacks {
   onOpen: () => void;
@@ -14,12 +18,14 @@ export class GeminiService {
   private inputAudioContext: AudioContext | null = null;
   private processor: ScriptProcessorNode | null = null;
   private source: MediaStreamAudioSourceNode | null = null;
-  
+
   // BUFFERING LOGIC to fix "Skipping Words"
-  private transcriptionBuffer: string = ""; 
+  private transcriptionBuffer: string = "";
 
   constructor() {
-    this.ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    this.ai = new GoogleGenAI({
+      apiKey: (import.meta as any).env.VITE_GEMINI_API_KEY,
+    });
   }
 
   // --- LIVE STREAMING ---
@@ -27,24 +33,26 @@ export class GeminiService {
   async connect(stream: MediaStream, callbacks: GeminiServiceCallbacks) {
     try {
       this.transcriptionBuffer = "";
-      
+
       // Use 16kHz for native compatibility and speed
-      this.inputAudioContext = new (window.AudioContext || (window as any).webkitAudioContext)({
+      this.inputAudioContext = new (window.AudioContext ||
+        (window as any).webkitAudioContext)({
         sampleRate: 16000,
       });
 
-      if (this.inputAudioContext.state === 'suspended') {
+      if (this.inputAudioContext.state === "suspended") {
         await this.inputAudioContext.resume();
       }
 
       const clonedStream = stream.clone();
-      this.source = this.inputAudioContext.createMediaStreamSource(clonedStream);
+      this.source =
+        this.inputAudioContext.createMediaStreamSource(clonedStream);
       this.processor = this.inputAudioContext.createScriptProcessor(4096, 1, 1);
 
       let sessionPromise: Promise<any>;
 
       const config = {
-        model: 'gemini-2.5-flash-native-audio-preview-09-2025',
+        model: "gemini-2.5-flash-native-audio-preview-09-2025",
         callbacks: {
           onopen: () => {
             callbacks.onOpen();
@@ -53,23 +61,26 @@ export class GeminiService {
           onmessage: (message: LiveServerMessage) => {
             // 1. Capture streaming text
             if (message.serverContent?.inputTranscription) {
-               const text = message.serverContent.inputTranscription.text;
-               if (text) {
-                 // Update buffer continuously
-                 this.transcriptionBuffer += text;
-                 // Send "Live" update
-                 callbacks.onTranscriptionUpdate(this.transcriptionBuffer, false);
-               }
+              const text = message.serverContent.inputTranscription.text;
+              if (text) {
+                // Update buffer continuously
+                this.transcriptionBuffer += text;
+                // Send "Live" update
+                callbacks.onTranscriptionUpdate(
+                  this.transcriptionBuffer,
+                  false
+                );
+              }
             }
-            
+
             // 2. Commit on Turn Complete (The Pause)
             if (message.serverContent?.turnComplete) {
-                if (this.transcriptionBuffer.trim()) {
-                    // Send "Final" update with the full buffer
-                    callbacks.onTranscriptionUpdate(this.transcriptionBuffer, true);
-                    // Clear buffer for next phrase
-                    this.transcriptionBuffer = "";
-                }
+              if (this.transcriptionBuffer.trim()) {
+                // Send "Final" update with the full buffer
+                callbacks.onTranscriptionUpdate(this.transcriptionBuffer, true);
+                // Clear buffer for next phrase
+                this.transcriptionBuffer = "";
+              }
             }
           },
           onerror: (e: ErrorEvent) => {
@@ -81,8 +92,8 @@ export class GeminiService {
           },
         },
         config: {
-          responseModalities: [Modality.AUDIO], 
-          inputAudioTranscription: {}, 
+          responseModalities: [Modality.AUDIO],
+          inputAudioTranscription: {},
           systemInstruction: `
             Role: Precise Uzbek Transcriber.
             Task: Output verbatim text.
@@ -93,20 +104,27 @@ export class GeminiService {
             4. Keep output streaming continuous.
           `,
           safetySettings: [
-             { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
-             { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
-             { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
-             { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }
-          ]
+            { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
+            { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
+            {
+              category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+              threshold: "BLOCK_NONE",
+            },
+            {
+              category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+              threshold: "BLOCK_NONE",
+            },
+          ],
         },
       };
 
       sessionPromise = this.ai.live.connect(config);
       this.session = await sessionPromise;
-
     } catch (error) {
       console.error("Failed to connect:", error);
-      callbacks.onError(error instanceof Error ? error : new Error("Unknown error"));
+      callbacks.onError(
+        error instanceof Error ? error : new Error("Unknown error")
+      );
     }
   }
 
@@ -116,11 +134,11 @@ export class GeminiService {
     this.processor.onaudioprocess = (e) => {
       const inputData = e.inputBuffer.getChannelData(0);
       const pcmBlob = createBlob(inputData);
-      
-      sessionPromise.then(session => {
+
+      sessionPromise.then((session) => {
         try {
           session.sendRealtimeInput({ media: pcmBlob });
-        } catch(err) {
+        } catch (err) {
           // Ignore send errors if session is closed
         }
       });
@@ -135,14 +153,14 @@ export class GeminiService {
       this.processor.disconnect();
       this.source.disconnect();
     }
-    
+
     if (this.inputAudioContext) {
       this.inputAudioContext.close();
     }
 
     if (this.session) {
       try {
-        this.session.close(); 
+        this.session.close();
       } catch (e) {
         console.error("Error closing session:", e);
       }
@@ -160,22 +178,22 @@ export class GeminiService {
   async transcribeAudioFile(audioBlob: Blob): Promise<string> {
     try {
       const base64Audio = await blobToBase64(audioBlob);
-      
+
       const response = await this.ai.models.generateContent({
-        model: 'gemini-2.5-flash', // Use standard Flash for file processing
+        model: "gemini-2.5-flash", // Use standard Flash for file processing
         contents: {
           parts: [
             {
               inlineData: {
                 mimeType: audioBlob.type,
-                data: base64Audio
-              }
+                data: base64Audio,
+              },
             },
             {
-              text: "Transcribe this audio verbatim in Uzbek. Use official Latin script. Do not add timestamps or speaker labels. Just the text."
-            }
-          ]
-        }
+              text: "Transcribe this audio verbatim in Uzbek. Use official Latin script. Do not add timestamps or speaker labels. Just the text.",
+            },
+          ],
+        },
       });
 
       return response.text || "";
@@ -188,33 +206,34 @@ export class GeminiService {
   async summarizeText(text: string): Promise<string> {
     try {
       const response = await this.ai.models.generateContent({
-        model: 'gemini-2.5-flash',
+        model: "gemini-2.5-flash",
         contents: {
           parts: [
             {
-              text: `Quyidagi matnni o'zbek tilida qisqacha xulosa qilib ber (Summarize this text in Uzbek). Asosiy fikrlarni bullet pointlar orqali yoz:\n\n${text}`
-            }
-          ]
-        }
+              text: `Quyidagi matnni o'zbek tilida qisqacha xulosa qilib ber (Summarize this text in Uzbek). Asosiy fikrlarni bullet pointlar orqali yoz:\n\n${text}`,
+            },
+          ],
+        },
       });
       return response.text || "";
     } catch (error) {
-       console.error("Summary Error:", error);
-       throw error;
+      console.error("Summary Error:", error);
+      throw error;
     }
   }
 
-  async translateText(text: string, targetLang: 'en' | 'ru'): Promise<string> {
+  async translateText(text: string, targetLang: "en" | "ru"): Promise<string> {
     try {
-      const prompt = targetLang === 'en' 
-        ? "Translate the following Uzbek text to English. Output only the translation:" 
-        : "Translate the following Uzbek text to Russian. Output only the translation:";
+      const prompt =
+        targetLang === "en"
+          ? "Translate the following Uzbek text to English. Output only the translation:"
+          : "Translate the following Uzbek text to Russian. Output only the translation:";
 
       const response = await this.ai.models.generateContent({
-        model: 'gemini-2.5-flash',
+        model: "gemini-2.5-flash",
         contents: {
-          parts: [{ text: `${prompt}\n\n${text}` }]
-        }
+          parts: [{ text: `${prompt}\n\n${text}` }],
+        },
       });
       return response.text || "";
     } catch (error) {
@@ -231,16 +250,16 @@ function createBlob(data: Float32Array): GenAIBlob {
   const int16 = new Int16Array(l);
   for (let i = 0; i < l; i++) {
     const s = Math.max(-1, Math.min(1, data[i]));
-    int16[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
+    int16[i] = s < 0 ? s * 0x8000 : s * 0x7fff;
   }
   return {
     data: encode(new Uint8Array(int16.buffer)),
-    mimeType: 'audio/pcm;rate=16000',
+    mimeType: "audio/pcm;rate=16000",
   };
 }
 
 function encode(bytes: Uint8Array) {
-  let binary = '';
+  let binary = "";
   const len = bytes.byteLength;
   for (let i = 0; i < len; i++) {
     binary += String.fromCharCode(bytes[i]);
@@ -254,7 +273,7 @@ function blobToBase64(blob: Blob): Promise<string> {
     reader.onloadend = () => {
       const dataUrl = reader.result as string;
       // Remove "data:audio/xyz;base64," prefix
-      const base64 = dataUrl.split(',')[1];
+      const base64 = dataUrl.split(",")[1];
       resolve(base64);
     };
     reader.onerror = reject;
