@@ -37,8 +37,8 @@ export class GeminiService {
       // Use 16kHz for native compatibility and speed
       this.inputAudioContext = new (window.AudioContext ||
         (window as any).webkitAudioContext)({
-        sampleRate: 16000,
-      });
+          sampleRate: 16000,
+        });
 
       if (this.inputAudioContext.state === "suspended") {
         await this.inputAudioContext.resume();
