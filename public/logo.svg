@@ -1,0 +1,25 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Gradient Definitions -->
+  <defs>
+    <linearGradient id="minimalGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#059669;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#14b8a6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Simplified Waveform Icon -->
+  <g transform="translate(24, 24)">
+    <!-- Center Mic -->
+    <rect x="-3" y="-12" width="6" height="16" rx="3" fill="url(#minimalGradient)"/>
+    <path d="M -6 6 Q -6 10, 0 10 Q 6 10, 6 6" stroke="url(#minimalGradient)" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <line x1="0" y1="10" x2="0" y2="14" stroke="url(#minimalGradient)" stroke-width="2" stroke-linecap="round"/>
+    <line x1="-5" y1="14" x2="5" y2="14" stroke="url(#minimalGradient)" stroke-width="3" stroke-linecap="round"/>
+    
+    <!-- Sound bars -->
+    <rect x="-16" y="-6" width="2" height="12" rx="1" fill="url(#minimalGradient)" opacity="0.6"/>
+    <rect x="-10" y="-9" width="2" height="18" rx="1" fill="url(#minimalGradient)" opacity="0.8"/>
+    
+    <rect x="14" y="-6" width="2" height="12" rx="1" fill="url(#minimalGradient)" opacity="0.6"/>
+    <rect x="8" y="-9" width="2" height="18" rx="1" fill="url(#minimalGradient)" opacity="0.8"/>
+  </g>
+</svg>

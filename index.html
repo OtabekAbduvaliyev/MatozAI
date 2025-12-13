@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="uz" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>MatozAI - Ovozli Yordamchi</title>
+    <meta
+      name="description"
+      content="MatozAI - O'zbek tilida ovozni matnga aylantiruvchi sun'iy intellekt yordamchisi. Audio, video va rasm fayllardan matn ajratish."
+    />
+    <meta
+      name="keywords"
+      content="MatozAI, ovozli yordamchi, uzbek speech to text, transcription, AI assistant"
+    />
+    <meta name="author" content="Musayev Doniyor, Abduvaliyev Otabek" />
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MatozAI - Ovozli Yordamchi" />
+    <meta
+      property="og:description"
+      content="O'zbek tilida ovozni matnga aylantiruvchi sun'iy intellekt yordamchisi"
+    />
+    <meta property="og:image" content="/logo.svg" />
+
+    <!-- PWA -->
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <link rel="apple-touch-icon" href="/logo.svg" />
+    <script type="importmap">
+      {
+        "imports": {
+          "react/": "https://aistudiocdn.com/react@^19.2.0/",
+          "react": "https://aistudiocdn.com/react@^19.2.0",
+          "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+          "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
+          "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
+          "jspdf": "https://aistudiocdn.com/jspdf@^2.5.1/dist/jspdf.es.min.js"
+        }
+      }
+    </script>
+    <link rel="stylesheet" href="/index.css" />
+  </head>
+  <body class="bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

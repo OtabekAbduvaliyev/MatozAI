@@ -1,0 +1,17 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Simplified Waveform Icon in White -->
+  <g transform="translate(24, 24)">
+    <!-- Center Mic -->
+    <rect x="-3" y="-12" width="6" height="16" rx="3" fill="white"/>
+    <path d="M -6 6 Q -6 10, 0 10 Q 6 10, 6 6" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <line x1="0" y1="10" x2="0" y2="14" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    <line x1="-5" y1="14" x2="5" y2="14" stroke="white" stroke-width="3" stroke-linecap="round"/>
+    
+    <!-- Sound bars -->
+    <rect x="-16" y="-6" width="2" height="12" rx="1" fill="white" opacity="0.7"/>
+    <rect x="-10" y="-9" width="2" height="18" rx="1" fill="white" opacity="0.85"/>
+    
+    <rect x="14" y="-6" width="2" height="12" rx="1" fill="white" opacity="0.7"/>
+    <rect x="8" y="-9" width="2" height="18" rx="1" fill="white" opacity="0.85"/>
+  </g>
+</svg>
