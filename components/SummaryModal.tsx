@@ -1,11 +1,24 @@
 import React, { useState, useRef, useEffect } from "react";
-import { X, Copy, Sparkles, Check, MessageSquare, Send, User, Bot } from "lucide-react";
+import {
+  X,
+  Copy,
+  Sparkles,
+  Check,
+  MessageSquare,
+  Send,
+  User,
+  Bot,
+} from "lucide-react";
 
 interface SummaryModalProps {
   isOpen: boolean;
   onClose: () => void;
   summary: string;
   isLoading: boolean;
+  onChat?: (
+    history: { role: "user" | "ai"; content: string }[],
+    message: string
+  ) => Promise<string>;
 }
 
 interface Message {
@@ -20,6 +33,7 @@ const SummaryModal: React.FC<SummaryModalProps> = ({
   onClose,
   summary,
   isLoading,
+  onChat,
 }) => {
   const [activeTab, setActiveTab] = useState<"summary" | "chat">("summary");
   const [copied, setCopied] = useState(false);
@@ -27,6 +41,7 @@ const SummaryModal: React.FC<SummaryModalProps> = ({
   // Chat State
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
+  const [isChatLoading, setIsChatLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Reset tab when opening
@@ -43,7 +58,8 @@ const SummaryModal: React.FC<SummaryModalProps> = ({
         {
           id: "1",
           role: "ai",
-          content: "Salom! Men suhbat bo'yicha yordamchingizman. Xulosa yoki matn bo'yicha qanday savollaringiz bor?",
+          content:
+            "Salom! Men suhbat bo'yicha yordamchingizman. Xulosa yoki matn bo'yicha qanday savollaringiz bor?",
           timestamp: Date.now(),
         },
       ];
@@ -66,29 +82,65 @@ const SummaryModal: React.FC<SummaryModalProps> = ({
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleSend = () => {
-    if (!inputValue.trim()) return;
+  const handleSend = async () => {
+    if (!inputValue.trim() || isChatLoading) return;
 
+    const text = inputValue.trim();
     const newUserMsg: Message = {
       id: Date.now().toString(),
       role: "user",
-      content: inputValue.trim(),
+      content: text,
       timestamp: Date.now(),
     };
 
     setMessages((prev) => [...prev, newUserMsg]);
     setInputValue("");
+    setIsChatLoading(true);
 
-    // Mock AI Response
-    setTimeout(() => {
-      const newAiMsg: Message = {
-        id: (Date.now() + 1).toString(),
+    try {
+      if (onChat) {
+        // Filter out initial greeting if needed, or keep it.
+        // We pass the current visible history (excluding the new message we just added visually,
+        // but technically we should pass what we have).
+        // Since setMessages is async, 'messages' here still has the old history.
+        // We filter out the very first greeting if it has id='1' and we don't want it in context?
+        // Actually, let's keep it simple.
+        const historyForAi = messages.filter((m) => m.id !== "1"); // optional: exclude greeting
+
+        const response = await onChat(historyForAi, text);
+
+        const newAiMsg: Message = {
+          id: Date.now().toString(),
+          role: "ai",
+          content: response,
+          timestamp: Date.now(),
+        };
+        setMessages((prev) => [...prev, newAiMsg]);
+      } else {
+        // Fallback or Mock
+        setTimeout(() => {
+          const newAiMsg: Message = {
+            id: (Date.now() + 1).toString(),
+            role: "ai",
+            content:
+              "Bu funksiya hali ulanmagan. Iltimos, administrator bilan bog'laning.",
+            timestamp: Date.now(),
+          };
+          setMessages((prev) => [...prev, newAiMsg]);
+        }, 1000);
+      }
+    } catch (err) {
+      console.error(err);
+      const errorMsg: Message = {
+        id: Date.now().toString(),
         role: "ai",
-        content: "Bu hozircha faqat dizayn. Tez orada bu yerda sun'iy intellekt javob beradi!",
+        content: "Xatolik yuz berdi. Iltimos qaytadan urinib ko'ring.",
         timestamp: Date.now(),
       };
-      setMessages((prev) => [...prev, newAiMsg]);
-    }, 1000);
+      setMessages((prev) => [...prev, errorMsg]);
+    } finally {
+      setIsChatLoading(false);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -114,10 +166,11 @@ const SummaryModal: React.FC<SummaryModalProps> = ({
             <div className="flex bg-slate-100 dark:bg-slate-800 rounded-lg p-1">
               <button
                 onClick={() => setActiveTab("summary")}
-                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${activeTab === "summary"
+                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
+                  activeTab === "summary"
                     ? "bg-white dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 shadow-sm"
                     : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
-                  }`}
+                }`}
               >
                 <span className="flex items-center gap-2">
                   <Sparkles className="w-4 h-4" />
@@ -126,10 +179,11 @@ const SummaryModal: React.FC<SummaryModalProps> = ({
               </button>
               <button
                 onClick={() => setActiveTab("chat")}
-                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${activeTab === "chat"
+                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
+                  activeTab === "chat"
                     ? "bg-white dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 shadow-sm"
                     : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
-                  }`}
+                }`}
               >
                 <span className="flex items-center gap-2">
                   <MessageSquare className="w-4 h-4" />
@@ -170,15 +224,17 @@ const SummaryModal: React.FC<SummaryModalProps> = ({
                 {messages.map((msg) => (
                   <div
                     key={msg.id}
-                    className={`flex items-start gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""
-                      }`}
+                    className={`flex items-start gap-3 ${
+                      msg.role === "user" ? "flex-row-reverse" : ""
+                    }`}
                   >
                     {/* Avatar */}
                     <div
-                      className={`flex-none w-8 h-8 rounded-full flex items-center justify-center ${msg.role === "user"
+                      className={`flex-none w-8 h-8 rounded-full flex items-center justify-center ${
+                        msg.role === "user"
                           ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400"
                           : "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
-                        }`}
+                      }`}
                     >
                       {msg.role === "user" ? (
                         <User className="w-5 h-5" />
@@ -189,10 +245,11 @@ const SummaryModal: React.FC<SummaryModalProps> = ({
 
                     {/* Message Bubble */}
                     <div
-                      className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${msg.role === "user"
+                      className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${
+                        msg.role === "user"
                           ? "bg-emerald-600 text-white rounded-tr-none"
                           : "bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-100 dark:border-slate-700 rounded-tl-none"
-                        }`}
+                      }`}
                     >
                       {msg.content}
                     </div>

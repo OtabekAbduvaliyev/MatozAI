@@ -37,8 +37,8 @@ export class GeminiService {
       // Use 16kHz for native compatibility and speed
       this.inputAudioContext = new (window.AudioContext ||
         (window as any).webkitAudioContext)({
-          sampleRate: 16000,
-        });
+        sampleRate: 16000,
+      });
 
       if (this.inputAudioContext.state === "suspended") {
         await this.inputAudioContext.resume();
@@ -294,6 +294,58 @@ export class GeminiService {
       return response.text || "";
     } catch (error) {
       console.error("Translation Error:", error);
+      throw error;
+    }
+  }
+
+  async chat(
+    context: string,
+    history: { role: "user" | "ai"; content: string }[],
+    newMessage: string
+  ): Promise<string> {
+    try {
+      // Construct the chat history for Gemini
+      // System instructions or Context setting
+      const contents = [
+        {
+          role: "user",
+          parts: [
+            {
+              text: `Quyidagi matn asosida savollarga javob ber (Answer questions based on the following text). Javoblar o'zbek tilida bo'lsin: \n\n${context}`,
+            },
+          ],
+        },
+        {
+          role: "model",
+          parts: [
+            { text: "Tushunarli. Matn bo'yicha savollaringizni bering." },
+          ],
+        },
+      ];
+
+      // Append history (Limit to last 10 messages to save tokens)
+      const recentHistory = history.slice(-10);
+      recentHistory.forEach((msg) => {
+        contents.push({
+          role: msg.role === "user" ? "user" : "model",
+          parts: [{ text: msg.content }],
+        });
+      });
+
+      // Append new message
+      contents.push({
+        role: "user",
+        parts: [{ text: newMessage }],
+      });
+
+      const response = await this.ai.models.generateContent({
+        model: "gemini-2.5-flash",
+        contents: contents,
+      });
+
+      return response.text || "";
+    } catch (error) {
+      console.error("Chat Error:", error);
       throw error;
     }
   }
