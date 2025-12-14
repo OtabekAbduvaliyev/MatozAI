@@ -1,6 +1,6 @@
 export const formatDuration = (seconds: number): string => {
   if (!seconds || isNaN(seconds)) return "0:00";
-  
+
   const s = Math.floor(seconds);
   const m = Math.floor(s / 60);
   const remS = s % 60;
@@ -10,12 +10,12 @@ export const formatDuration = (seconds: number): string => {
 export const createAudioFile = (blob: Blob): File => {
   let ext = 'webm';
   // Strip codecs and other parameters (e.g. 'audio/webm;codecs=opus' -> 'audio/webm')
-  let mime = blob.type.split(';')[0].trim(); 
+  let mime = blob.type.split(';')[0].trim();
 
   // Improve compatibility mapping
   if (mime === 'audio/mp4' || mime === 'audio/x-m4a') {
     ext = 'm4a';
-    mime = 'audio/mp4'; 
+    mime = 'audio/mp4';
   } else if (mime === 'audio/mpeg' || mime === 'audio/mp3') {
     ext = 'mp3';
     mime = 'audio/mpeg';
@@ -30,8 +30,8 @@ export const createAudioFile = (blob: Blob): File => {
     ext = 'webm';
     mime = 'audio/webm';
   }
-  
-  const filename = `matozai-rec-${Date.now()}.${ext}`;
+
+  const filename = `Sado-rec-${Date.now()}.${ext}`;
   // Important: Use the clean MIME type for the File constructor
   return new File([blob], filename, { type: mime, lastModified: Date.now() });
 };
@@ -39,7 +39,7 @@ export const createAudioFile = (blob: Blob): File => {
 export const shareAudio = async (blob: Blob): Promise<boolean> => {
   try {
     const file = createAudioFile(blob);
-    
+
     // Strict check for API support
     if (!navigator.share || !navigator.canShare) {
       return false;
@@ -47,8 +47,8 @@ export const shareAudio = async (blob: Blob): Promise<boolean> => {
 
     const shareData = {
       files: [file],
-      title: 'MatozAI Audio',
-      text: 'MatozAI platformasi orqali yozilgan ovozli xabar.',
+      title: 'Sado Audio',
+      text: 'Sado platformasi orqali yozilgan ovozli xabar.',
     };
 
     // Helper to check if data is shareable
@@ -56,7 +56,7 @@ export const shareAudio = async (blob: Blob): Promise<boolean> => {
       await navigator.share(shareData);
       return true;
     }
-    
+
     return false;
   } catch (error) {
     // "NotAllowedError" (Permission denied) usually happens if:
@@ -67,7 +67,7 @@ export const shareAudio = async (blob: Blob): Promise<boolean> => {
     if (errName !== 'AbortError' && errName !== 'NotAllowedError') {
       console.error('Share failed:', error);
     }
-    
+
     // We return false to let the UI decide if it wants to show download fallback.
     return false;
   }

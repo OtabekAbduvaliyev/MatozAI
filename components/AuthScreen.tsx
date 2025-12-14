@@ -1,8 +1,7 @@
 const AuthScreen = () => {
   const handleGoogleLogin = () => {
-    window.location.href = `${
-      import.meta.env.VITE_API_URL
-    }/auth/callback/google`;
+    window.location.href = `${import.meta.env.VITE_API_URL
+      }/auth/callback/google`;
   };
 
   return (
@@ -21,7 +20,7 @@ const AuthScreen = () => {
             <img src="/logo-white.svg" alt="w-10 h-10 text-white" />{" "}
           </div>
           <h1 className="text-4xl font-bold bg-linear-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent mb-3">
-            MatozAI
+            Sado
           </h1>
           <p className="text-slate-500 dark:text-slate-400 text-lg">
             Ovozli yordamchingizga xush kelibsiz

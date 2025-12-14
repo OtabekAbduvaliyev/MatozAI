@@ -1,5 +1,5 @@
 /**
- * MatozAI - Ovozli Yordamchi
+ * Sado - Ovozli Yordamchi
  * Authors: Musayev Doniyor, Abduvaliyev Otabek
  */
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";

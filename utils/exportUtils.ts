@@ -3,11 +3,11 @@ import { jsPDF } from "jspdf";
 export const exportToPdf = (text: string) => {
   try {
     const doc = new jsPDF();
-    
+
     // Split text to fit page width
     // Page width is usually 210mm. Margins 10mm. Usable 190mm.
     const splitText = doc.splitTextToSize(text, 180);
-    
+
     // Add text
     // Note: Standard jsPDF fonts only support Latin characters.
     // For Cyrillic, this might render garbage characters without a custom font.
@@ -16,8 +16,8 @@ export const exportToPdf = (text: string) => {
     doc.setFont("helvetica");
     doc.setFontSize(12);
     doc.text(splitText, 15, 20);
-    
-    doc.save("matozai-transkripsiya.pdf");
+
+    doc.save("Sado-transkripsiya.pdf");
   } catch (e) {
     console.error("PDF Export Error", e);
     alert("PDF yaratishda xatolik. Iltimos Word formatini sinab ko'ring.");
@@ -33,7 +33,7 @@ export const exportToWord = (text: string) => {
           xmlns='http://www.w3.org/TR/REC-html40'>
     <head>
       <meta charset='utf-8'>
-      <title>MatozAI Transkripsiya</title>
+      <title>Sado Transkripsiya</title>
       <style>
         body { font-family: 'Calibri', 'Arial', sans-serif; font-size: 11pt; }
       </style>
@@ -41,20 +41,20 @@ export const exportToWord = (text: string) => {
     <body>
   `;
   const footer = "</body></html>";
-  
+
   // Convert newlines to breaks
   const htmlContent = text.split('\n').map(para => `<p>${para}</p>`).join('');
-  
+
   const sourceHTML = header + htmlContent + footer;
-  
+
   const blob = new Blob(['\ufeff', sourceHTML], {
     type: 'application/msword'
   });
-  
+
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.download = 'matozai-transkripsiya.doc';
+  link.download = 'Sado-transkripsiya.doc';
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

@@ -1,5 +1,5 @@
 {
-  "name": "MatozAI",
+  "name": "Sado",
   "description": "Fast, accurate Uzbek voice-to-text application using Gemini Live API.",
   "requestFramePermissions": [
     "microphone"

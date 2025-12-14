@@ -1,8 +1,8 @@
-# 🤖 MatozAI
+# 🤖 Sado
 
 <div align="center">
 
-![MatozAI Banner](/public/logo.svg)
+![Sado Banner](/public/logo.svg)
 
 **Next-Gen AI Transcription & Analysis Platform for Uzbek Language**
 
@@ -17,9 +17,9 @@
 
 ## 📖 About The Project
 
-**MatozAI** is a powerful web application designed to bring state-of-the-art AI capabilities to the Uzbek language. It serves as an intelligent assistant that can listen, transcribe, summarize, translate, and even chat about your audio conversations in real-time.
+**Sado** is a powerful web application designed to bring state-of-the-art AI capabilities to the Uzbek language. It serves as an intelligent assistant that can listen, transcribe, summarize, translate, and even chat about your audio conversations in real-time.
 
-Built with a focus on **speed**, **accuracy**, and **user experience**, MatozAI leverages Google's **Gemini 2.5 Flash** model to process audio streams natively, ensuring ultra-low latency transcription.
+Built with a focus on **speed**, **accuracy**, and **user experience**, Sado leverages Google's **Gemini 2.5 Flash** model to process audio streams natively, ensuring ultra-low latency transcription.
 
 ### 🌟 Key Features
 
@@ -59,8 +59,8 @@ Follow these steps to get a local copy up and running.
 1.  **Clone the repository**
 
     ```bash
-    git clone https://github.com/yourusername/matozai.git
-    cd matozai
+    git clone https://github.com/yourusername/Sado.git
+    cd Sado
     ```
 
 2.  **Install dependencies**

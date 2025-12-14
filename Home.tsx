@@ -37,7 +37,7 @@ type AppState = "IDLE" | "RECORDING" | "PROCESSING" | "REVIEW";
 type Theme = "light" | "dark";
 
 // Local storage key for PREFERENCES only, data goes to Backend
-const PREFS_KEY = "matozai_prefs_v1";
+const PREFS_KEY = "Sado_prefs_v1";
 
 const Home: React.FC = () => {
   const [appState, setAppState] = useState<AppState>("IDLE");
@@ -322,8 +322,7 @@ const Home: React.FC = () => {
       : 20 * 1024 * 1024;
     if (file.size > maxSize) {
       alert(
-        `Fayl hajmi juda katta (maks ${
-          file.type.startsWith("video/") ? "50MB" : "20MB"
+        `Fayl hajmi juda katta (maks ${file.type.startsWith("video/") ? "50MB" : "20MB"
         })`
       );
       return;
@@ -628,10 +627,9 @@ const Home: React.FC = () => {
           absolute top-20 left-1/2 -translate-x-1/2 z-50
           bg-emerald-600 text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium
           transition-all duration-300 pointer-events-none flex items-center gap-2
-          ${
-            toastMessage
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 -translate-y-4"
+          ${toastMessage
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 -translate-y-4"
           }
       `}
       >
@@ -641,9 +639,9 @@ const Home: React.FC = () => {
       {/* 1. Header */}
       <header className="flex-none h-14 px-4 flex justify-between items-center z-10 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
         <div className="flex items-center gap-3">
-          <img src="/logo.svg" alt="MatozAI" className="w-8 h-8" />
+          <img src="/logo.svg" alt="Sado" className="w-8 h-8" />
           <h1 className="text-xl font-bold tracking-tight bg-linear-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
-            MatozAI
+            Sado
           </h1>
           <button
             onClick={() => setScript((s) => (s === "lat" ? "cyr" : "lat"))}
@@ -662,8 +660,8 @@ const Home: React.FC = () => {
               selectedFileType === "audio"
                 ? "audio/*"
                 : selectedFileType === "video"
-                ? "video/*"
-                : "image/*"
+                  ? "video/*"
+                  : "image/*"
             }
             onChange={handleFileUpload}
           />
