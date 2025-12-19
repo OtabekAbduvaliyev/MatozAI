@@ -52,7 +52,7 @@ export class GeminiService {
       let sessionPromise: Promise<any>;
 
       const config = {
-        model: "gemini-2.5-flash-native-audio-preview-09-2025",
+        model: "gemini-3-flash-preview",
         callbacks: {
           onopen: () => {
             callbacks.onOpen();
@@ -180,7 +180,7 @@ export class GeminiService {
       const base64Audio = await blobToBase64(audioBlob);
 
       const response = await this.ai.models.generateContent({
-        model: "gemini-2.5-flash", // Use standard Flash for file processing
+        model: "gemini-3-flash-preview", // Use standard Flash for file processing
         contents: {
           parts: [
             {
@@ -208,7 +208,7 @@ export class GeminiService {
       const base64Video = await blobToBase64(videoBlob);
 
       const response = await this.ai.models.generateContent({
-        model: "gemini-2.5-flash",
+        model: "gemini-3-flash-preview",
         contents: {
           parts: [
             {
@@ -236,7 +236,7 @@ export class GeminiService {
       const base64Image = await blobToBase64(imageBlob);
 
       const response = await this.ai.models.generateContent({
-        model: "gemini-2.5-flash",
+        model: "gemini-3-flash-preview",
         contents: {
           parts: [
             {
@@ -262,7 +262,7 @@ export class GeminiService {
   async summarizeText(text: string): Promise<string> {
     try {
       const response = await this.ai.models.generateContent({
-        model: "gemini-2.5-flash",
+        model: "gemini-3-flash-preview",
         contents: {
           parts: [
             {
@@ -286,7 +286,7 @@ export class GeminiService {
           : "Translate the following Uzbek text to Russian. Output only the translation:";
 
       const response = await this.ai.models.generateContent({
-        model: "gemini-2.5-flash",
+        model: "gemini-3-flash-preview",
         contents: {
           parts: [{ text: `${prompt}\n\n${text}` }],
         },
@@ -339,7 +339,7 @@ export class GeminiService {
       });
 
       const response = await this.ai.models.generateContent({
-        model: "gemini-2.5-flash",
+        model: "gemini-3.0-flash",
         contents: contents,
       });
 
