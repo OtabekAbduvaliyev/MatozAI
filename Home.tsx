@@ -24,7 +24,7 @@ import {
   Image as ImageIcon,
 } from "lucide-react";
 import { formatDuration } from "./utils/audioUtils";
-import { exportToPdf, exportToWord } from "./utils/exportUtils";
+import { exportToPdf, exportToWord, exportToTxt } from "./utils/exportUtils";
 import { GeminiService } from "./services/geminiService";
 import { storageService } from "./services/storageService";
 import { authService } from "./services/authService";
@@ -484,12 +484,14 @@ const Home: React.FC = () => {
     }
   };
 
-  const handleExport = (type: "pdf" | "word") => {
+  const handleExport = (type: "pdf" | "word" | "txt") => {
     if (!fullText.trim()) return;
     if (type === "pdf") {
       exportToPdf(fullText);
-    } else {
+    } else if (type === "word") {
       exportToWord(fullText);
+    } else {
+      exportToTxt(fullText);
     }
     setIsExportOpen(false);
     setToastMessage("Hujjat yuklanmoqda...");
@@ -752,13 +754,13 @@ const Home: React.FC = () => {
               </button>
 
               {isExportOpen && (
-                <div className="absolute top-full right-0 mt-2 flex flex-col w-32 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-100 dark:border-slate-700 p-1 animate-in fade-in zoom-in-95 duration-200">
+                <div className="absolute top-full right-0 mt-2 flex flex-col w-36 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-100 dark:border-slate-700 p-1 animate-in fade-in zoom-in-95 duration-200">
                   <button
                     onClick={() => handleExport("word")}
                     className="flex items-center gap-2 px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-lg transition-colors text-left cursor-pointer"
                   >
                     <FileText className="w-3.5 h-3.5 text-blue-500" />
-                    Word
+                    Word (.doc)
                   </button>
                   <button
                     onClick={() => handleExport("pdf")}
@@ -766,6 +768,13 @@ const Home: React.FC = () => {
                   >
                     <FileDown className="w-3.5 h-3.5 text-red-500" />
                     PDF
+                  </button>
+                  <button
+                    onClick={() => handleExport("txt")}
+                    className="flex items-center gap-2 px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-lg transition-colors text-left cursor-pointer"
+                  >
+                    <FileText className="w-3.5 h-3.5 text-slate-400" />
+                    TXT
                   </button>
                 </div>
               )}
