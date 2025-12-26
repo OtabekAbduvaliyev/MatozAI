@@ -322,7 +322,8 @@ const Home: React.FC = () => {
       : 20 * 1024 * 1024;
     if (file.size > maxSize) {
       alert(
-        `Fayl hajmi juda katta (maks ${file.type.startsWith("video/") ? "50MB" : "20MB"
+        `Fayl hajmi juda katta (maks ${
+          file.type.startsWith("video/") ? "50MB" : "20MB"
         })`
       );
       return;
@@ -627,9 +628,10 @@ const Home: React.FC = () => {
           absolute top-20 left-1/2 -translate-x-1/2 z-50
           bg-emerald-600 text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium
           transition-all duration-300 pointer-events-none flex items-center gap-2
-          ${toastMessage
-            ? "opacity-100 translate-y-0"
-            : "opacity-0 -translate-y-4"
+          ${
+            toastMessage
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 -translate-y-4"
           }
       `}
       >
@@ -660,8 +662,8 @@ const Home: React.FC = () => {
               selectedFileType === "audio"
                 ? "audio/*"
                 : selectedFileType === "video"
-                  ? "video/*"
-                  : "image/*"
+                ? "video/*"
+                : "image/*"
             }
             onChange={handleFileUpload}
           />

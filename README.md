@@ -9,7 +9,7 @@
 [![React](https://img.shields.io/badge/React-19.2-blue?style=for-the-badge&logo=react)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-6.2-purple?style=for-the-badge&logo=vite)](https://vitejs.dev/)
 [![TailwindCSS](https://img.shields.io/badge/Tailwind-4.1-cyan?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com/)
-[![Gemini AI](https://img.shields.io/badge/Powered_by-Gemini_2.0-orange?style=for-the-badge&logo=google)](https://deepmind.google/technologies/gemini/)
+[![Gemini AI](https://img.shields.io/badge/Powered_by-Gemini_3.0-orange?style=for-the-badge&logo=google)](https://deepmind.google/technologies/gemini/)
 
 </div>
 
@@ -19,7 +19,7 @@
 
 **Sado** is a powerful web application designed to bring state-of-the-art AI capabilities to the Uzbek language. It serves as an intelligent assistant that can listen, transcribe, summarize, translate, and even chat about your audio conversations in real-time.
 
-Built with a focus on **speed**, **accuracy**, and **user experience**, Sado leverages Google's **Gemini 2.5 Flash** model to process audio streams natively, ensuring ultra-low latency transcription.
+Built with a focus on **speed**, **accuracy**, and **user experience**, Sado leverages Google's **Gemini 3.0 Flash** model to process audio streams natively, ensuring ultra-low latency transcription.
 
 ### 🌟 Key Features
 
@@ -38,7 +38,7 @@ Built with a focus on **speed**, **accuracy**, and **user experience**, Sado lev
 
 - **Frontend**: React 19, TypeScript, Vite
 - **Styling**: TailwindCSS 4, Lucide React (Icons)
-- **AI Engine**: Google GenAI SDK (Gemini 2.5 Flash Native Audio)
+- **AI Engine**: Google GenAI SDK (Gemini 3.0 Flash Native Audio)
 - **State Management**: React Hooks (Context-free simple state for MVP)
 - **Networking**: Axios (REST), Socket.io-client (Real-time events)
 - **Build Tool**: Vite
