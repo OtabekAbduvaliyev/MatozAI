@@ -194,7 +194,10 @@ export class GeminiService {
             },
           ],
         },
-      });
+        generationConfig: {
+          maxOutputTokens: 65536,
+        },
+      } as any);
 
       return response.text || "";
     } catch (error) {
@@ -222,7 +225,10 @@ export class GeminiService {
             },
           ],
         },
-      });
+        generationConfig: {
+          maxOutputTokens: 65536,
+        },
+      } as any);
 
       return response.text || "";
     } catch (error) {
@@ -250,7 +256,10 @@ export class GeminiService {
             },
           ],
         },
-      });
+        generationConfig: {
+          maxOutputTokens: 65536,
+        },
+      } as any);
 
       return response.text || "";
     } catch (error) {
@@ -270,7 +279,10 @@ export class GeminiService {
             },
           ],
         },
-      });
+        generationConfig: {
+          maxOutputTokens: 65536,
+        },
+      } as any);
       return response.text || "";
     } catch (error) {
       console.error("Summary Error:", error);
@@ -290,7 +302,10 @@ export class GeminiService {
         contents: {
           parts: [{ text: `${prompt}\n\n${text}` }],
         },
-      });
+        generationConfig: {
+          maxOutputTokens: 65536,
+        },
+      } as any);
       return response.text || "";
     } catch (error) {
       console.error("Translation Error:", error);

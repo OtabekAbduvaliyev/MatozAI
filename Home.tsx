@@ -22,6 +22,7 @@ import {
   Mic,
   Video,
   Image as ImageIcon,
+  X,
 } from "lucide-react";
 import { formatDuration } from "./utils/audioUtils";
 import { exportToPdf, exportToWord, exportToTxt } from "./utils/exportUtils";
@@ -45,6 +46,7 @@ const Home: React.FC = () => {
   const [theme, setTheme] = useState<Theme>("dark");
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [savedSessions, setSavedSessions] = useState<SavedSession[]>([]);
+  const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
 
   // Summarizer State
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
@@ -511,6 +513,7 @@ const Home: React.FC = () => {
     };
 
     await storageService.saveSession(newSession);
+    setActiveSessionId(newSession.id);
     refreshHistory();
   };
 
@@ -522,6 +525,7 @@ const Home: React.FC = () => {
     setRecordingDuration(session.duration || 0);
     setTranslationCache({});
     setAppState("REVIEW");
+    setActiveSessionId(session.id);
     setIsHistoryOpen(false);
   };
 
@@ -563,6 +567,19 @@ const Home: React.FC = () => {
       executeReset(false);
       return;
     }
+
+    // Checking if current session is saved and unmodified
+    if (activeSessionId) {
+      const currentSession = savedSessions.find(
+        (s) => s.id === activeSessionId
+      );
+      if (currentSession && currentSession.text === fullText) {
+        // Safe to close without confirmation as it's saved and identical
+        executeReset(false);
+        return;
+      }
+    }
+
     setIsConfirmOpen(true);
   };
 
@@ -580,6 +597,7 @@ const Home: React.FC = () => {
     setRecordingDuration(0);
     setTranslationCache({});
     setSummaryCache("");
+    setActiveSessionId(null);
   };
 
   const handleNewConversation = async () => {
@@ -894,6 +912,17 @@ const Home: React.FC = () => {
               <Plus className="w-6 h-6 transition-transform group-hover:rotate-90" />
             )}
           </button>
+
+          {/* Close active session button (Only in Review) */}
+          {appState === "REVIEW" && (
+            <button
+              onClick={handleResetRequest}
+              className="group p-4 text-slate-400 hover:text-red-500 bg-white/80 dark:bg-slate-800/80 hover:bg-white dark:hover:bg-slate-800 rounded-2xl transition-all duration-300 cursor-pointer shadow-lg hover:shadow-xl hover:shadow-red-500/20 dark:hover:shadow-red-500/30 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 hover:border-red-300/50 dark:hover:border-red-700/50 hover:scale-110"
+              title="Yopish"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          )}
         </div>
       </div>
 
