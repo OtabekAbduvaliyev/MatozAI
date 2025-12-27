@@ -103,6 +103,28 @@ const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
             ))
           )}
         </div>
+
+        {/* Promotion Box */}
+        <div className="p-6 bg-emerald-50/50 dark:bg-emerald-900/10 border-t border-emerald-100 dark:border-emerald-900/30">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-emerald-200/50 dark:border-emerald-800/50">
+            <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 mb-1 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              Telegram Bot
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mb-3 leading-relaxed">
+              Yo'lda bo'lganingizda va ovozli xabarlarni matnga tez aylantirish
+              kerak bo'lganda botimizdan foydalaning.
+            </p>
+            <a
+              href="https://t.me/sadoouzBot"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 w-full py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-emerald-500/20"
+            >
+              Botga O'tish
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   );
