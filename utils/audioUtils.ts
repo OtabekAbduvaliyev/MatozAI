@@ -4,34 +4,34 @@ export const formatDuration = (seconds: number): string => {
   const s = Math.floor(seconds);
   const m = Math.floor(s / 60);
   const remS = s % 60;
-  return `${m}:${remS.toString().padStart(2, '0')}`;
+  return `${m}:${remS.toString().padStart(2, "0")}`;
 };
 
 export const createAudioFile = (blob: Blob): File => {
-  let ext = 'webm';
+  let ext = "webm";
   // Strip codecs and other parameters (e.g. 'audio/webm;codecs=opus' -> 'audio/webm')
-  let mime = blob.type.split(';')[0].trim();
+  let mime = blob.type.split(";")[0].trim();
 
   // Improve compatibility mapping
-  if (mime === 'audio/mp4' || mime === 'audio/x-m4a') {
-    ext = 'm4a';
-    mime = 'audio/mp4';
-  } else if (mime === 'audio/mpeg' || mime === 'audio/mp3') {
-    ext = 'mp3';
-    mime = 'audio/mpeg';
-  } else if (mime === 'audio/wav' || mime === 'audio/x-wav') {
-    ext = 'wav';
-    mime = 'audio/wav';
-  } else if (mime === 'audio/webm') {
-    ext = 'webm';
-    mime = 'audio/webm';
+  if (mime === "audio/mp4" || mime === "audio/x-m4a") {
+    ext = "m4a";
+    mime = "audio/mp4";
+  } else if (mime === "audio/mpeg" || mime === "audio/mp3") {
+    ext = "mp3";
+    mime = "audio/mpeg";
+  } else if (mime === "audio/wav" || mime === "audio/x-wav") {
+    ext = "wav";
+    mime = "audio/wav";
+  } else if (mime === "audio/webm") {
+    ext = "webm";
+    mime = "audio/webm";
   } else {
     // Fallback for empty or unknown types
-    ext = 'webm';
-    mime = 'audio/webm';
+    ext = "webm";
+    mime = "audio/webm";
   }
 
-  const filename = `Sado-rec-${Date.now()}.${ext}`;
+  const filename = `Sadoo-rec-${Date.now()}.${ext}`;
   // Important: Use the clean MIME type for the File constructor
   return new File([blob], filename, { type: mime, lastModified: Date.now() });
 };
@@ -47,8 +47,8 @@ export const shareAudio = async (blob: Blob): Promise<boolean> => {
 
     const shareData = {
       files: [file],
-      title: 'Sado Audio',
-      text: 'Sado platformasi orqali yozilgan ovozli xabar.',
+      title: "Sadoo Audio",
+      text: "Sadoo platformasi orqali yozilgan ovozli xabar.",
     };
 
     // Helper to check if data is shareable
@@ -64,8 +64,8 @@ export const shareAudio = async (blob: Blob): Promise<boolean> => {
     // 2. Browser policy blocked it (e.g. no user activation).
     // 3. File type not allowed.
     const errName = (error as any).name;
-    if (errName !== 'AbortError' && errName !== 'NotAllowedError') {
-      console.error('Share failed:', error);
+    if (errName !== "AbortError" && errName !== "NotAllowedError") {
+      console.error("Share failed:", error);
     }
 
     // We return false to let the UI decide if it wants to show download fallback.
@@ -76,7 +76,7 @@ export const shareAudio = async (blob: Blob): Promise<boolean> => {
 export const downloadAudio = (blob: Blob) => {
   const file = createAudioFile(blob);
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
+  const a = document.createElement("a");
   a.href = url;
   a.download = file.name;
   document.body.appendChild(a);

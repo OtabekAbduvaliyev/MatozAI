@@ -37,7 +37,7 @@ type AppState = "IDLE" | "RECORDING" | "PROCESSING" | "REVIEW";
 type Theme = "light" | "dark";
 
 // Local storage key for PREFERENCES only, data goes to Backend
-const PREFS_KEY = "Sado_prefs_v1";
+const PREFS_KEY = "Sadoo_prefs_v1";
 
 const Home: React.FC = () => {
   const [appState, setAppState] = useState<AppState>("IDLE");
@@ -643,9 +643,9 @@ const Home: React.FC = () => {
       {/* 1. Header */}
       <header className="flex-none h-14 px-4 flex justify-between items-center z-10 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
         <div className="flex items-center gap-3">
-          <img src="/logo.svg" alt="Sado" className="w-8 h-8" />
+          <img src="/logo.svg" alt="Sadoo" className="w-8 h-8" />
           <h1 className="text-xl font-bold tracking-tight bg-linear-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
-            Sado
+            Sadoo
           </h1>
           <button
             onClick={() => setScript((s) => (s === "lat" ? "cyr" : "lat"))}

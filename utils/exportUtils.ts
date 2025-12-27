@@ -1,7 +1,7 @@
 import { jsPDF } from "jspdf";
 
 /**
- * Export utilities for Sado Web App
+ * Export utilities for Sadoo Web App
  * Provides beautiful PDF, Word, and TXT export functionality
  */
 
@@ -29,12 +29,12 @@ export const exportToPdf = (text: string, title?: string) => {
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(24);
     doc.setFont("helvetica", "bold");
-    doc.text("Sado AI", margin, 22);
+    doc.text("Sadoo", margin, 21);
 
     // Subtitle
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
-    doc.text("Audio/Video Transkripsiya", margin, 30);
+    doc.text("Audio/Video Transkripsiya", margin, 29);
 
     currentY = 50;
 
@@ -105,7 +105,7 @@ export const exportToPdf = (text: string, title?: string) => {
     addFooter(doc, pageWidth, pageHeight);
 
     // Save
-    doc.save("Sado-transkripsiya.pdf");
+    doc.save("Sadoo-transkripsiya.pdf");
   } catch (e) {
     console.error("PDF Export Error", e);
     alert("PDF yaratishda xatolik. Iltimos Word formatini sinab ko'ring.");
@@ -126,7 +126,7 @@ function addFooter(doc: jsPDF, pageWidth: number, pageHeight: number) {
   doc.setFont("helvetica", "italic");
   doc.setTextColor(150, 150, 150);
   doc.text(
-    "© Sado AI - Audio/Video Transkripsiya Xizmati",
+    "© Sadoo - Audio/Video Transkripsiya Xizmati",
     pageWidth / 2,
     footerY,
     {
@@ -141,7 +141,7 @@ function addFooter(doc: jsPDF, pageWidth: number, pageHeight: number) {
 
 // ========== WORD EXPORT ==========
 export const exportToWord = (text: string, title?: string) => {
-  const docTitle = title || "Sado Transkripsiya";
+  const docTitle = title || "Sadoo Transkripsiya";
   const dateStr = new Date().toLocaleDateString("uz-UZ", {
     year: "numeric",
     month: "long",
@@ -219,7 +219,7 @@ export const exportToWord = (text: string, title?: string) => {
     </head>
     <body>
       <div class="header">
-        <h1>🎯 Sado AI</h1>
+        <h1>🎯 Sadoo</h1>
         <p>Audio/Video Transkripsiya Xizmati</p>
       </div>
       
@@ -236,8 +236,8 @@ export const exportToWord = (text: string, title?: string) => {
       </div>
       
       <div class="footer">
-        <p>© Sado AI - Barcha huquqlar himoyalangan</p>
-        <p>🌐 sado.uz | 📱 @SadoAIBot</p>
+        <p>© Sadoo - Barcha huquqlar himoyalangan</p>
+        <p>🌐 www.sadoo.uz | 📱 @sadoouzBot</p>
       </div>
     </body>
     </html>
@@ -250,7 +250,7 @@ export const exportToWord = (text: string, title?: string) => {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = "Sado-transkripsiya.doc";
+  link.download = "Sadoo-transkripsiya.doc";
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -259,7 +259,7 @@ export const exportToWord = (text: string, title?: string) => {
 
 // ========== TXT EXPORT ==========
 export const exportToTxt = (text: string, title?: string) => {
-  const docTitle = title || "Sado Transkripsiya";
+  const docTitle = title || "Sadoo Transkripsiya";
   const dateStr = new Date().toLocaleDateString("uz-UZ", {
     year: "numeric",
     month: "long",
@@ -272,7 +272,7 @@ export const exportToTxt = (text: string, title?: string) => {
   const thinDivider = "─".repeat(50);
 
   const content = `${divider}
-   🎯 SADO AI - TRANSKRIPSIYA
+   🎯 SADOO - TRANSKRIPSIYA
 ${divider}
 
 📋 ${docTitle}
@@ -284,8 +284,8 @@ ${text}
 
 ${thinDivider}
 
-© Sado AI - Audio/Video Transkripsiya Xizmati
-🌐 sado.uz | 📱 @SadoAIBot
+© Sadoo - Audio/Video Transkripsiya Xizmati
+🌐 www.sadoo.uz | 📱 @sadoouzBot
 
 ${divider}
 `;
@@ -297,7 +297,7 @@ ${divider}
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = "Sado-transkripsiya.txt";
+  link.download = "Sadoo-transkripsiya.txt";
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

@@ -1,8 +1,8 @@
-# 🤖 Sado
+# 🤖 Sadoo
 
 <div align="center">
 
-![Sado Banner](/public/logo.svg)
+![Sadoo Banner](/public/logo.svg)
 
 **Next-Gen AI Transcription & Analysis Platform for Uzbek Language**
 
@@ -17,9 +17,9 @@
 
 ## 📖 About The Project
 
-**Sado** is a powerful web application designed to bring state-of-the-art AI capabilities to the Uzbek language. It serves as an intelligent assistant that can listen, transcribe, summarize, translate, and even chat about your audio conversations in real-time.
+**Sadoo** is a powerful web application designed to bring state-of-the-art AI capabilities to the Uzbek language. It serves as an intelligent assistant that can listen, transcribe, summarize, translate, and even chat about your audio conversations in real-time.
 
-Built with a focus on **speed**, **accuracy**, and **user experience**, Sado leverages Google's **Gemini 3.0 Flash** model to process audio streams natively, ensuring ultra-low latency transcription.
+Built with a focus on **speed**, **accuracy**, and **user experience**, Sadoo leverages Google's **Gemini 3.0 Flash** model to process audio streams natively, ensuring ultra-low latency transcription.
 
 ### 🌟 Key Features
 
@@ -59,8 +59,8 @@ Follow these steps to get a local copy up and running.
 1.  **Clone the repository**
 
     ```bash
-    git clone https://github.com/yourusername/Sado.git
-    cd Sado
+    git clone https://github.com/yourusername/Sadoo.git
+    cd Sadoo
     ```
 
 2.  **Install dependencies**
